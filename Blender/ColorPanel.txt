@@ -39,10 +39,14 @@ class VIEW3D_PT_texture_picker(bpy.types.Panel):
         row.operator("paint.brush_colors_flip", text="Previous Color")
 
         color_definitions = [
-            {"name": "Red", "color": (1, 0, 0)},
-            {"name": "Orange", "color": (1, 1, 0)},
-            {"name": "Blue", "color": (0, 0, 1)},
-            {"name": "Green", "color": (0, 1, 0)},
+            {"name": "Red Wrapping Paper", "color": (1, 0, 0)},
+            {"name": "Neon Lights", "color": (1, 1, 0)},
+            {"name": "Candies", "color": (0, 0, 1)},
+            {"name": "Green Wrapping Paper", "color": (0, 1, 0)},
+            {"name": "Candy Sticks", "color": (1, .5, 0)},
+            {"name": "Purple Fractal", "color": (1, 0, 1)},
+            {"name": "Flash", "color": (0, 0, 0)},
+            {"name": "GeoGingerbread", "color": (1, 1, 1)},
         ]
 
         for color_def in color_definitions:
@@ -50,7 +54,8 @@ class VIEW3D_PT_texture_picker(bpy.types.Panel):
                 DynamicColorOperator.bl_idname, text=color_def["name"]
             )
             dynamic_operator.color = color_def["color"]
-
+            #dynamic_operator.draw_color = color_def["color"]
+  
 
 classes = (DynamicColorOperator, VIEW3D_PT_texture_picker)
 
