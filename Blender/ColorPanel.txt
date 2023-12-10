@@ -1,68 +1,69 @@
-
 import bpy
 
 
-
-class MakeItRed(bpy.types.Operator):
-    bl_idname = "example.red"
-    bl_label = "Red"
-
-    def execute(self, context):
-        bpy.data.brushes["TexDraw"].color = (1, 0, 0)
-        return {'FINISHED'}
-
-    
-class MakeItBlue(bpy.types.Operator):
-    bl_idname = "example.blue"
-    bl_label = "Blue"
+class ColorOperatorBase(bpy.types.Operator):
+    bl_label = "Base Color"
+    color = (1, 1, 1)
 
     def execute(self, context):
-        bpy.data.brushes["TexDraw"].color = (0, 0, 1)
+        bpy.data.brushes["TexDraw"].color = self.color
         return {'FINISHED'}
 
-class MakeItGreen(bpy.types.Operator):
-    bl_idname = "example.green"
-    bl_label = "Green"
+
+class DynamicColorOperator(ColorOperatorBase):
+    bl_idname = "example.dynamic_color"
+    bl_label = "Dynamic Color"
+
+    color: bpy.props.FloatVectorProperty(
+        name="Color",
+        subtype='COLOR',
+        size=3,
+        min=0.0,
+        max=1.0,
+        default=(1, 1, 1)
+    )
 
     def execute(self, context):
-        bpy.data.brushes["TexDraw"].color = (0, 1, 0)
+        bpy.data.brushes["TexDraw"].color = self.color
         return {'FINISHED'}
-    
+
+
 class VIEW3D_PT_texture_picker(bpy.types.Panel):
-    
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    
     bl_category = "Wallpaper"
     bl_label = "Select Village Texture"
-    
-
-
 
     def draw(self, context):
-        """define the layout of the panel"""
         row = self.layout.row()
-       # painter = row.operator('data.brushes["TexDraw"]')
         row.operator("paint.brush_colors_flip", text="Previous Color")
-     
-        self.layout.operator(MakeItRed.bl_idname)
-        self.layout.operator(MakeItBlue.bl_idname)
-        self.layout.operator(MakeItGreen.bl_idname)
-       # painter.color=(0.322277, 0.317474, 1)
-      #  row.operator('paint.brush_color', text="Hello World Operator").color=(0.322277, 0.317474, 0)
-      #  bpy.data.brushes["TexDraw"].color = (0.322277, 0.317474, 1)
 
-classes = (MakeItRed, MakeItBlue, MakeItGreen)
-        
+        color_definitions = [
+            {"name": "Red", "color": (1, 0, 0)},
+            {"name": "Orange", "color": (1, 1, 0)},
+            {"name": "Blue", "color": (0, 0, 1)},
+            {"name": "Green", "color": (0, 1, 0)},
+        ]
+
+        for color_def in color_definitions:
+            dynamic_operator = self.layout.operator(
+                DynamicColorOperator.bl_idname, text=color_def["name"]
+            )
+            dynamic_operator.color = color_def["color"]
+
+
+classes = (DynamicColorOperator, VIEW3D_PT_texture_picker)
+
 def register():
     bpy.utils.register_class(VIEW3D_PT_texture_picker)
-    for cls in classes:
-        bpy.utils.register_class(cls)
-    
+    bpy.utils.register_class(DynamicColorOperator)
+
+
 def unregister():
     bpy.utils.unregister_class(VIEW3D_PT_texture_picker)
-    
-    
-if __name__=="__main__":
+    bpy.utils.unregister_class(DynamicColorOperator)
+
+
+if __name__ == "__main__":
     register()
     print(bpy.data.brushes["TexDraw"].color)
