@@ -1,0 +1,12 @@
+# Created by Polycam
+# object name: Dec 10, 2023
+newmtl Dec 10, 2023_0
+Ka 0.000 0.000 0.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+Tr 0.000000
+illum 1
+Ns 1.000000
+map_Kd Dec 10, 2023_2_mX5gUcGK.jpg
+normal Dec 10, 2023_0_mX5gUcGK.jpg
+map_ao Dec 10, 2023_1_mX5gUcGK.jpg
